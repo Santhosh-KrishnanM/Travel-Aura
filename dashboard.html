@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tamil Nadu Tourism - Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f7f8fc; color: #222; }
+    .dashboard-container { display: flex; min-height: 100vh; }
+    .sidebar { background: #15161c; color: #fff; width: 220px; flex-shrink: 0; display: flex; flex-direction: column; }
+    .sidebar-header { display: flex; align-items: center; padding: 1rem; }
+    .sidebar-title { font-weight: bold; font-size: 1.25rem; letter-spacing: 1px; }
+    .sidebar-menu { list-style: none; margin: 0; padding: 0; }
+    .sidebar-menu li { padding: 0.7rem 1.5rem; cursor: pointer; transition: background 0.2s; }
+    .sidebar-menu li.active, .sidebar-menu li:hover { background: #c38828; color: #fff; }
+    .sidebar-menu li a { color: inherit; text-decoration: none; display: flex; align-items: center; }
+    .sidebar-menu li a i { margin-right: 12px; }
+    .sidebar-footer { margin-top: auto; padding: 1rem; }
+    .logout-btn { background: #f44336; color: #fff; border: none; border-radius: 8px; padding: 0.7rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; }
+    .logout-btn i { margin-right: 8px; }
+    .main-content { flex: 1; padding: 2rem; background: #f7f8fc; }
+    .dashboard-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; }
+    .header-left { display: flex; align-items: center; }
+    .sidebar-toggle { background: none; border: none; font-size: 1.5rem; margin-right: 10px; cursor: pointer; }
+    .topbar-title, .dashboard-header h1 { font-size: 1.35rem; font-weight: bold; color: #c38828; margin: 0; }
+    .header-right { display: flex; align-items: center; gap: 1.2rem; }
+    .search-box { display: flex; align-items: center; background: #fff; border-radius: 6px; padding: 0.25rem 0.7rem; box-shadow: 0 2px 8px rgba(0,0,0,0.07);}
+    .search-box input { border: none; outline: none; background: transparent; margin-left: 5px;}
+    .user-avatar { background: #ececec; border-radius: 50%; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; margin-right: 8px; }
+    .user-profile { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+    .content-section { display: none; margin-bottom: 2rem; }
+    .content-section.active { display: block; }
+    .stats-grid { display: flex; gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: #fff; padding: 1rem 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); display: flex; align-items: center; gap: 1rem; flex: 1;}
+    .stat-icon { font-size: 2.2rem; color: #c38828; }
+    .stat-info h3 { margin: 0; font-size: 2rem; }
+    .stat-info p { margin: 0; color: #888; }
+    .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    .dashboard-card { background: #fff; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+    .dashboard-card.full-width { grid-column: 1 / span 3; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; }
+    .quick-actions { display: flex; gap: 1rem; }
+    .action-btn { background: #c38828; color: #fff; border: none; border-radius: 8px; padding: 0.7rem 1.2rem; font-weight: bold; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .activity-list, .activity-item { width: 100%; }
+    .activity-item { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+    .activity-icon { font-size: 1.3rem; color: #c38828; }
+    .destinations-grid { display: flex; gap: 1rem; }
+    .destination-card { background: #f9f9f9; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden; cursor: pointer; width: 210px; }
+    .destination-image { width: 100%; height: 120px; background-size: cover; background-position: center; }
+    .destination-info { padding: 1rem; }
+    .destination-type { font-size: 0.9rem; color: #c38828; }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; }
+    .filter-tabs { display: flex; gap: 0.5rem; }
+    .filter-tab { background: #ececec; border: none; border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; }
+    .filter-tab.active, .filter-tab:hover { background: #c38828; color: #fff; }
+    .bookings-list, .favorites-grid { margin-top: 2rem;}
+    .booking-card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 1.5rem; margin-bottom: 1rem;}
+    .booking-header { display: flex; align-items: center; justify-content: space-between; }
+    .booking-status { padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 1rem; }
+    .booking-status.confirmed { background: #38c172; color: #fff;}
+    .booking-details { display: flex; gap: 2rem; margin-top: 1rem;}
+    .detail-item { display: flex; align-items: center; gap: 6px; color: #555;}
+    .booking-actions { display: flex; gap: 0.7rem; margin-top: 1.2rem;}
+    .btn-outline { background: none; border: 1px solid #c38828; color: #c38828; border-radius: 8px; padding: 0.4rem 1rem; cursor: pointer;}
+    .btn-danger { background: #f44336; color: #fff; border: none; border-radius: 8px; padding: 0.4rem 1rem; cursor: pointer;}
+    .btn-primary { background: #c38828; color: #fff; border: none; border-radius: 8px; padding: 0.4rem 1rem; cursor: pointer; }
+    .profile-container { background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); max-width: 700px; margin: 2rem auto;}
+    .profile-header { display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;}
+    .profile-avatar { background: #ececec; border-radius: 50%; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; font-size: 2.4rem;}
+    .profile-info { flex: 1;}
+    .profile-content { margin-top: 1.5rem;}
+    .profile-section { margin-bottom: 2rem;}
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;}
+    .info-item label { font-weight: bold; color: #444; display: block;}
+    .preferences-grid { display: flex; gap: 1.5rem; }
+    .preference-item { background: #ececec; border-radius: 8px; padding: 0.7rem 1.1rem; display: flex; align-items: center; gap: 8px;}
+    .support-container { padding: 2rem; }
+    .support-grid { display: flex; gap: 2rem; margin-top: 2rem;}
+    .support-card { background: #fff; padding: 1.4rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); flex: 1; text-align: center;}
+    .support-card i { font-size: 2rem; color: #c38828; margin-bottom: 0.8rem;}
+    .view-all { color: #c38828; text-decoration: none; font-weight: 500;}
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h2><i class="fas fa-map-marked-alt"></i> Travel Aura</h2>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="active">
+          <a href="#" onclick="showSection('overview')">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="showSection('destinations')">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Destinations</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="showSection('bookings')">
+            <i class="fas fa-calendar-check"></i>
+            <span>My Bookings</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="showSection('favorites')">
+            <i class="fas fa-heart"></i>
+            <span>Favorites</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="showSection('profile')">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="showSection('support')">
+            <i class="fas fa-headset"></i>
+            <span>Support</span>
+          </a>
+        </li>
+      </ul>
+      <div class="sidebar-footer">
+        <a href="#" onclick="logout()" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 id="pageTitle">Dashboard</h1>
+        </div>
+        <div class="header-right">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search destinations...">
+          </div>
+          <div class="user-profile">
+            <div class="user-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <span id="userWelcome">Welcome!</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Overview Section -->
+      <section id="overview" class="content-section active">
+        <div class="stats-grid" id="dashboardCards">
+          <!-- Cards for stats (filled by JS) -->
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Quick Actions -->
+          <div class="dashboard-card">
+            <div class="card-header">
+              <h3><i class="fas fa-rocket"></i> Quick Actions</h3>
+            </div>
+            <div class="quick-actions">
+              <button class="action-btn" onclick="showSection('destinations')">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Destinations</span>
+              </button>
+              <button class="action-btn" onclick="showSection('bookings')">
+                <i class="fas fa-calendar-plus"></i>
+                <span>Book Trip</span>
+              </button>
+              <button class="action-btn" onclick="showSection('favorites')">
+                <i class="fas fa-heart"></i>
+                <span>Favorites</span>
+              </button>
+              <button class="action-btn" onclick="showSection('profile')">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Recent Activities -->
+          <div class="dashboard-card">
+            <div class="card-header">
+              <h3><i class="fas fa-clock"></i> Recent Activities</h3>
+            </div>
+            <div class="activity-list" id="recentActivities">
+              <div class="activity-item">
+                <div class="activity-icon">
+                  <i class="fas fa-star"></i>
+                </div>
+                <div class="activity-details">
+                  <p style="text-align: center;">No Activity</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Popular Destinations -->
+          <div class="dashboard-card full-width">
+            <div class="card-header">
+              <h3><i class="fas fa-fire"></i> Popular Destinations</h3>
+              <a href="#" class="view-all">View All</a>
+            </div>
+            <div class="destinations-grid">
+              <div class="destination-card" onclick="showDestinationDetails('ooty')">
+                <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=300&q=80')"></div>
+                <div class="destination-info">
+                  <h4>Ooty</h4>
+                  <p><i class="fas fa-star"></i> 4.8 (1,234 reviews)</p>
+                  <span class="destination-type">Hill Station</span>
+                </div>
+              </div>
+              <div class="destination-card" onclick="showDestinationDetails('kodaikanal')">
+                <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=300&q=80')"></div>
+                <div class="destination-info">
+                  <h4>Kodaikanal</h4>
+                  <p><i class="fas fa-star"></i> 4.7 (892 reviews)</p>
+                  <span class="destination-type">Hill Station</span>
+                </div>
+              </div>
+              <div class="destination-card" onclick="showDestinationDetails('rameswaram')">
+                <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=300&q=80')"></div>
+                <div class="destination-info">
+                  <h4>Rameswaram</h4>
+                  <p><i class="fas fa-star"></i> 4.6 (756 reviews)</p>
+                  <span class="destination-type">Spiritual</span>
+                </div>
+              </div>
+              <div class="destination-card" onclick="showDestinationDetails('mahabalipuram')">
+                <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1545558014-8692077e9b5c?auto=format&fit=crop&w=300&q=80')"></div>
+                <div class="destination-info">
+                  <h4>Mahabalipuram</h4>
+                  <p><i class="fas fa-star"></i> 4.5 (634 reviews)</p>
+                  <span class="destination-type">Heritage</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Destinations Section -->
+      <section id="destinations" class="content-section">
+        <div class="section-header">
+          <h2>Explore Destinations</h2>
+          <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterDestinations('all')">All</button>
+            <button class="filter-tab" onclick="filterDestinations('hill-station')">Hill Stations</button>
+            <button class="filter-tab" onclick="filterDestinations('beach')">Beaches</button>
+            <button class="filter-tab" onclick="filterDestinations('temple')">Temples</button>
+            <button class="filter-tab" onclick="filterDestinations('heritage')">Heritage</button>
+          </div>
+        </div>
+        <div class="destinations-list">
+          <!-- Destinations will be populated by JavaScript -->
+        </div>
+      </section>
+
+      <!-- Bookings Section -->
+      <section id="bookings" class="content-section">
+        <div class="section-header">
+          <h2>My Bookings</h2>
+          <button class="btn-primary" onclick="createNewBooking()">
+            <i class="fas fa-plus"></i> New Booking
+          </button>
+        </div>
+        <div class="bookings-list">
+          <!-- Bookings will be populated by JavaScript -->
+        </div>
+      </section>
+
+      <!-- Favorites Section -->
+      <section id="favorites" class="content-section">
+        <div class="section-header">
+          <h2>My Favorite Places</h2>
+        </div>
+        <div class="favorites-grid">
+          <!-- Favorites will be populated by JavaScript -->
+        </div>
+      </section>
+
+      <!-- Profile Section -->
+      <section id="profile" class="content-section">
+        <div class="profile-container">
+          <div class="profile-header">
+            <div class="profile-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="profile-info">
+              <h2 id="profileName">User Name</h2>
+              <p id="profileEmail">user@example.com</p>
+            </div>
+            <button class="btn-primary" onclick="editProfile()">Edit Profile</button>
+          </div>
+          <div class="profile-content">
+            <div class="profile-section">
+              <h3>Personal Information</h3>
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>Username</label>
+                  <span id="profileUsername">username</span>
+                </div>
+                <div class="info-item">
+                  <label>Email</label>
+                  <span id="profileEmailDetail">user@example.com</span>
+                </div>
+                <div class="info-item">
+                  <label>Phone</label>
+                  <span id="profilePhone">+91 9876543210</span>
+                </div>
+                <div class="info-item">
+                  <label>Address</label>
+                  <span id="profileAddress">Chennai, Tamil Nadu</span>
+                </div>
+              </div>
+            </div>
+            <div class="profile-section">
+              <h3>Travel Preferences</h3>
+              <div class="preferences-grid">
+                <div class="preference-item">
+                  <i class="fas fa-mountain"></i>
+                  <span>Adventure Tourism</span>
+                </div>
+                <div class="preference-item">
+                  <i class="fas fa-utensils"></i>
+                  <span>Food Tourism</span>
+                </div>
+                <div class="preference-item">
+                  <i class="fas fa-camera"></i>
+                  <span>Photography</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Support Section -->
+      <section id="support" class="content-section">
+        <div class="support-container">
+          <h2>Help & Support</h2>
+          <div class="support-grid">
+            <div class="support-card">
+              <i class="fas fa-question-circle"></i>
+              <h3>FAQ</h3>
+              <p>Find answers to commonly asked questions</p>
+              <button class="btn-outline">View FAQ</button>
+            </div>
+            <div class="support-card">
+              <i class="fas fa-envelope"></i>
+              <h3>Contact Us</h3>
+              <p>Get in touch with our support team</p>
+              <button class="btn-outline">Contact</button>
+            </div>
+            <div class="support-card">
+              <i class="fas fa-phone"></i>
+              <h3>Call Support</h3>
+              <p>Speak directly with our representatives</p>
+              <button class="btn-outline">Call Now</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg, #e9ecef 0%, #f7f8fc 100%);
+  color: #222;
+}
+
+nav {
+  background: linear-gradient(90deg, #15161c 0%, #c38828 100%);
+  padding: 0.8rem 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+nav ul {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0; padding: 0;
+  width: 100%;
+  position: relative;
+}
+nav ul li {
+  position: relative;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
+  transition: background 0.2s, color 0.2s;
+}
+nav ul li.login-btn {
+  background: #f44336;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 8px;
+  margin-left: auto;
+  margin-right: 0;
+  padding: 0.5rem 1.2rem;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+nav ul li.login-btn:hover {
+  background: #d32f2f;
+  color: #fff;
+}
+nav ul li:hover {
+  background: #fff;
+  color: #c38828;
+}
+nav ul li ul {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #222;
+  color: #fff;
+  border-radius: 0 0 10px 10px;
+  padding: 10px 0;
+  min-width: 180px;
+  z-index: 101;
+}
+nav ul li:hover ul {
+  display: block;
+}
+nav ul li ul li {
+  padding: 10px 24px;
+  color: #fff;
+  background: none;
+  border-radius: 0;
+  font-size: 1rem;
+}
+nav ul li ul li:hover {
+  background: #c38828;
+  color: #fff;
+}
+
+.slideshow-container {
+  width: 100vw;
+  height: 50vh;
+  position: relative;
+  background: #333;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+}
+.slide {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: url('1.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 1;
+  z-index: 1;
+  border-radius: 0 0 32px 32px;
+}
+.overlay-text {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0 18px rgba(0,0,0,0.5);
+  max-width: 90vw;
+}
+.overlay-text h1 {
+  font-size: 4vw;
+  font-weight: 900;
+  margin-bottom: 0.3em;
+  letter-spacing: 2px;
+}
+.overlay-text p {
+  font-size: 1.5vw;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+
+.experiences {
+  background: #fff9ec;
+  color: #222;
+  padding: 60px 20px 70px 20px;
+  text-align: center;
+  box-shadow: 0 2px 16px rgba(195,136,40,0.05);
+}
+.experiences h2 {
+  font-size: 2.5rem;
+  color: #c38828;
+  margin-bottom: 38px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.boxes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+.box {
+  position: relative;
+  width: 270px;
+  height: 360px;
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.13);
+  background: #eee;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.box.adventure {
+  background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80');
+  background-size: cover;
+  background-position: center;
+}
+.box.eat {
+  background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80');
+  background-size: cover;
+  background-position: center;
+}
+.box.spiritual {
+  background-image: url('https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=800&q=80');
+  background-size: cover;
+  background-position: center;
+}
+.box .text {
+  background: rgba(0,0,0,0.5);
+  width: 100%;
+  text-align: center;
+  color: #000000;
+  font-size: 1.35rem;
+  font-weight: bold;
+  padding: 16px 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  letter-spacing: 1px;
+  transition: background 0.3s;
+}
+.box:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 10px 32px rgba(195,136,40,0.13);
+}
+.box:hover .text {
+  background: rgba(195,136,40,0.85);
+}
+
+.adventure-page, .food-page {
+  display: none;
+  color: #000000;
+  text-align: center;
+  padding: 50px;
+  background: linear-gradient(135deg, #15161c 0%, #c38828 100%);
+  min-height: 60vh;
+  margin-top: 30px;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(63,81,181,0.07);
+}
+.adventure-page h1, .food-page h1 {
+  font-size: 2.2rem;
+  margin-bottom: 18px;
+}
+.video-section {
+  text-align: center;
+  color: #fff;
+  padding: 24px;
+}
+.video-section h2 {
+  margin-bottom: 18px;
+  font-size: 1.2em;
+}
+.video-section video {
+  width: 90%;
+  max-width: 600px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+#loginModal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 34px 28px;
+  border-radius: 16px;
+  box-shadow: 0 0 22px rgba(195,136,40,0.18);
+  width: 320px;
+  color: #333;
+  position: relative;
+}
+.modal-content h2 {
+  margin-bottom: 15px;
+  text-align: center;
+  color: #c38828;
+}
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ececec;
+  border-radius: 8px;
+  background: #f8f8f8;
+  font-size: 1em;
+}
+.modal-content button {
+  width: 100%;
+  padding: 11px;
+  background-color: #c38828;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.1em;
+  transition: background 0.2s;
+}
+.modal-content button:hover {
+  background: #15161c;
+}
+.toggle-link {
+  margin-top: 13px;
+  color: #c38828;
+  text-align: center;
+  cursor: pointer;
+  font-size: 1em;
+}
+.close-btn {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  font-size: 26px;
+  color: #c38828;
+  cursor: pointer;
+}
+.back-btn {
+  margin: 18px auto;
+  padding: 10px 22px;
+  background-color: #c38828;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.08em;
+  margin-top: 18px;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(195,136,40,0.13);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.back-btn:hover {
+  background: #15161c;
+}
+
+/* Main Page styling */
+#mainPage {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: #000000;
+  min-height: 70vh;
+  width: 100vw;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 3000;
+}
+.main-content {
+  background: #000000;
+  padding: 45px 36px;
+  border-radius: 20px;
+  box-shadow: 0 0 24px rgba(195,136,40,0.09);
+  color: #333;
+  text-align: center;
+  margin-top: 60px;
+}
+.main-content h1 {
+  font-size: 2.3rem;
+  margin-bottom: 15px;
+  color: #c38828;
+}
+.main-content p {
+  font-size: 1.1rem;
+  margin-bottom: 28px;
+}
+.main-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: center;
+}
+.main-actions button {
+  min-width: 160px;
+  font-size: 1.09em;
+}
+
+#welcomePage {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: #000000;
+  min-height: 70vh;
+  width: 100vw;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 3000;
+}
+.welcome-content {
+  background: #000000;
+  padding: 44px 34px;
+  border-radius: 18px;
+  box-shadow: 0 0 24px rgba(195,136,40,0.11);
+  color: #333;
+  text-align: center;
+  margin-top: 60px;
+}
+.welcome-content h1 {
+  font-size: 2.1rem;
+  margin-bottom: 15px;
+  color: #c38828;
+}
+.welcome-content p {
+  font-size: 1.12rem;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 900px) {
+  nav ul { gap: 0.7rem; }
+  .boxes { gap: 1rem; }
+  .main-content, .welcome-content { padding: 20px 8px; margin-top: 30px;}
+}
+@media (max-width: 600px) {
+  nav ul { flex-direction: column; gap: 4px;}
+  .boxes { flex-direction: column; gap: 1.2rem; }
+  .box { width: 90vw; height: 200px; }
+  .modal-content { width: 95vw; padding: 18px 6px;}
+  .main-content, .welcome-content { padding: 10px 2px; margin-top: 10px;}
+}
